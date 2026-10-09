@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <g transform="rotate(-4 32 32)">
+    <path d="M8 10 C 22 7, 44 8, 56 9 C 57 24, 56 42, 55 55 C 40 57, 22 56, 9 55 C 7 40, 8 24, 8 10 Z" fill="#2d2d2d" transform="translate(3 3)"/>
+    <path d="M8 10 C 22 7, 44 8, 56 9 C 57 24, 56 42, 55 55 C 40 57, 22 56, 9 55 C 7 40, 8 24, 8 10 Z" fill="#fff9c4" stroke="#2d2d2d" stroke-width="3" stroke-linejoin="round"/>
+    <text x="32" y="41" text-anchor="middle" font-family="Kalam, 'Comic Sans MS', cursive" font-weight="700" font-size="24" fill="#2d2d2d">KB</text>
+  </g>
+</svg>

@@ -1,0 +1,145 @@
+@import 'tailwindcss';
+
+/*
+  Hand-drawn design system — every token lives here.
+  Use them as Tailwind utilities: bg-paper, text-pencil, rounded-wobbly, shadow-hard, font-display…
+*/
+@theme {
+  /* Colors: pencil on paper, a red correction marker, a blue ballpoint and a post-it */
+  --color-paper: #fdfbf7;
+  --color-pencil: #2d2d2d;
+  --color-erased: #e5e0d8;
+  --color-marker: #ff4d4d;
+  --color-pen: #2d5da1;
+  --color-postit: #fff9c4;
+
+  /* Fonts: marker headings, handwritten UI, a clean face for long paragraphs */
+  --font-display: 'Kalam', 'Patrick Hand', cursive;
+  --font-hand: 'Patrick Hand', 'Kalam', cursive;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+
+  /* Page width: use as max-w-page */
+  --container-page: 90rem;
+
+  /* Wobbly, hand-drawn corners — never perfectly round */
+  --radius-wobbly: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  --radius-wobbly-md: 15px 255px 15px 225px / 225px 15px 255px 15px;
+  --radius-blob: 52% 48% 55% 45% / 45% 55% 48% 52%;
+
+  /* Hard offset shadows only — cut paper, no blur */
+  --shadow-faint: 3px 3px 0 0 rgb(45 45 45 / 0.1);
+  --shadow-hard-sm: 2px 2px 0 0 #2d2d2d;
+  --shadow-hard: 4px 4px 0 0 #2d2d2d;
+  --shadow-hard-md: 6px 6px 0 0 #2d2d2d;
+  --shadow-hard-lg: 8px 8px 0 0 #2d2d2d;
+
+  --animate-bounce-slow: bounce-slow 3s ease-in-out infinite;
+  --animate-word-up: word-up 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-fade-up: fade-up 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-pop-in: pop-in 0.25s ease-out both;
+  --animate-wiggle: wiggle 2.4s ease-in-out infinite;
+
+  @keyframes bounce-slow {
+    0%,
+    100% {
+      translate: 0 0;
+    }
+    50% {
+      translate: 0 -10px;
+    }
+  }
+
+  @keyframes word-up {
+    from {
+      opacity: 0;
+      translate: 0 0.4em;
+      rotate: 3deg;
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+      rotate: 0deg;
+    }
+  }
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      translate: 0 20px;
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+
+  @keyframes pop-in {
+    from {
+      opacity: 0;
+      scale: 0.96;
+    }
+    to {
+      opacity: 1;
+      scale: 1;
+    }
+  }
+
+  @keyframes wiggle {
+    0%,
+    100% {
+      rotate: -8deg;
+    }
+    50% {
+      rotate: 10deg;
+    }
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 96px;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    /* Notebook paper grain */
+    background-image: radial-gradient(var(--color-erased) 1px, transparent 1px);
+    background-size: 24px 24px;
+    color: var(--color-pencil);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+  }
+
+  ::selection {
+    background: var(--color-postit);
+    color: var(--color-pencil);
+  }
+
+  :focus-visible {
+    outline: 3px dashed var(--color-pen);
+    outline-offset: 4px;
+  }
+}
+
+/* Visitors who ask for less motion get a still page. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
