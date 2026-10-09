@@ -22,10 +22,12 @@ function apiRoutes() {
 }
 
 export default defineConfig(({ mode }) => {
-  // Load ANTHROPIC_API_KEY from .env.local for the dev server. It has no VITE_ prefix,
-  // so it is never bundled into the browser code.
+  // Load the chat's API keys from .env.local for the dev server. They have no VITE_ prefix,
+  // so they are never bundled into the browser code.
   const env = loadEnv(mode, process.cwd(), '')
-  if (env.ANTHROPIC_API_KEY) process.env.ANTHROPIC_API_KEY = env.ANTHROPIC_API_KEY
+  for (const key of ['ANTHROPIC_API_KEY', 'GROQ_API_KEY']) {
+    if (env[key]) process.env[key] = env[key]
+  }
 
   return {
     plugins: [react(), tailwindcss(), apiRoutes()],
