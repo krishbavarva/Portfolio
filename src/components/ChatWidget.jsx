@@ -16,6 +16,29 @@ const suggestions = [
   'When is he available?',
 ]
 
+// AI answers sometimes use light Markdown. Show **bold** as bold and "- " / "* " lines as
+// bullets, and drop heading marks — without ever injecting HTML.
+function formatAnswer(text) {
+  if (typeof text !== 'string') return text
+  const lines = text.split('\n').map((line) =>
+    line.replace(/^\s*[-*]\s+/, '• ').replace(/^\s*#{1,6}\s+/, ''),
+  )
+  return lines.map((line, i) => (
+    <span key={i}>
+      {line.split(/(\*\*[^*]+\*\*)/g).map((part, j) =>
+        part.startsWith('**') && part.endsWith('**') && part.length > 4 ? (
+          <strong key={j} className="font-semibold">
+            {part.slice(2, -2)}
+          </strong>
+        ) : (
+          part
+        ),
+      )}
+      {i < lines.length - 1 && '\n'}
+    </span>
+  ))
+}
+
 // Speech bubble with a hand-drawn tail. Bot bubbles sit left (paper), visitor bubbles right (blue pen).
 function Bubble({ from, children }) {
   const isUser = from === 'user'
@@ -26,7 +49,7 @@ function Bubble({ from, children }) {
         isUser ? 'self-end bg-pen text-white' : 'self-start bg-white'
       }`}
     >
-      {children}
+      {isUser ? children : formatAnswer(children)}
       <svg
         aria-hidden
         width="18"
