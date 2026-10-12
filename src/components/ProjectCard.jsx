@@ -9,35 +9,23 @@ const decorations = ['tape', 'tack']
 export default function ProjectCard({ project, index = 0 }) {
   const { title, subtitle, description, highlights, tags, year, image, href, sketch } = project
 
-  const media = image ? (
-    <img src={image} alt={title} loading="lazy" className="size-full object-cover" />
-  ) : (
-    <span className="flex flex-col items-center gap-2" aria-hidden>
-      <span className="text-6xl grayscale-[30%] transition-transform duration-100 group-hover:scale-110 group-hover:-rotate-6">
-        {sketch ?? '✏️'}
-      </span>
-      <span className="font-display text-2xl text-pencil/35">{title}</span>
-    </span>
-  )
-
-  const mediaClass =
-    'group grid aspect-[16/10] place-items-center overflow-hidden rounded-wobbly border-2 border-dashed border-pencil/50 bg-erased/50'
-
   return (
     <Card
       as="article"
       decoration={decorations[index % 2]}
       className={`p-6 transition-[rotate,box-shadow] duration-100 hover:shadow-hard-md md:p-7 ${tilts[index % 2]}`}
     >
-      {href ? (
-        <a href={href} target="_blank" rel="noreferrer" className={mediaClass} aria-label={`${title} on GitHub`}>
-          {media}
-        </a>
-      ) : (
-        <div className={mediaClass}>{media}</div>
+      {/* Screenshot only when the project has one (add `image` in data.js) */}
+      {image && (
+        <img
+          src={image}
+          alt={title}
+          loading="lazy"
+          className="mb-5 aspect-[16/10] w-full rounded-wobbly border-2 border-pencil object-cover"
+        />
       )}
 
-      <div className="mt-5 flex items-start justify-between gap-3">
+      <div className="flex items-start justify-between gap-3">
         <ul className="flex flex-wrap gap-2">
           {tags.map((t) => (
             <Pill key={t}>{t}</Pill>
@@ -46,7 +34,14 @@ export default function ProjectCard({ project, index = 0 }) {
         <span className="shrink-0 font-hand text-lg text-pen">{year}</span>
       </div>
 
-      <h3 className="mt-4 text-3xl">{title}</h3>
+      <h3 className="mt-4 flex items-center gap-3 text-3xl">
+        {sketch && (
+          <span aria-hidden className="grid size-11 shrink-0 -rotate-6 place-items-center rounded-blob border-2 border-pencil bg-postit text-2xl">
+            {sketch}
+          </span>
+        )}
+        {title}
+      </h3>
       {subtitle && <p className="font-hand text-xl text-pen">{subtitle}</p>}
       <p className="mt-3 leading-relaxed text-pencil/80">{description}</p>
 
