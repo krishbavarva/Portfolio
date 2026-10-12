@@ -7,11 +7,15 @@ export const links = {
   github: 'https://github.com/krishbavarva',
 }
 
-// Contact form delivery (free): get an access key at https://web3forms.com (enter your email,
-// the key arrives by email) and paste it here. It's meant to be public, so it's safe in the code.
-// While it's empty, the form opens a pre-filled email to you instead of sending directly.
+// Contact form delivery via EmailJS (https://dashboard.emailjs.com). These IDs are meant to be
+// public, so they're safe in the code. Until serviceId and publicKey are filled in, the form
+// opens a pre-filled email to you instead of sending directly.
+// The visitor's confirmation email uses the "Auto-Reply" template (template_bhi83mj): link it in
+// EmailJS → Email Templates → Contact Us → Auto-Reply tab, and EmailJS sends it automatically.
 export const contactForm = {
-  web3formsKey: '',
+  serviceId: '', // Email Services → e.g. 'service_abc1234'
+  templateId: 'template_lslnn49', // "Contact Us" template
+  publicKey: '', // Account → General → Public Key
   topics: ['Alternance', 'Freelance project', 'Just saying hi'],
 }
 

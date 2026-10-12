@@ -32,7 +32,8 @@ export default function ContactForm() {
     const form = e.currentTarget
     if (form.botcheck.checked) return // spam bots tick the hidden box; people never see it
 
-    if (!contactForm.web3formsKey) {
+    const { serviceId, templateId, publicKey } = contactForm
+    if (!serviceId || !templateId || !publicKey) {
       openEmailDraft(values)
       setStatus('drafted')
       return
@@ -40,19 +41,29 @@ export default function ContactForm() {
 
     setStatus('sending')
     try {
-      const response = await fetch('https://api.web3forms.com/submit', {
+      // EmailJS REST API. The params cover the variable names used by its "Contact Us" and
+      // "Auto-Reply" templates ({{name}}, {{email}}, {{title}}, {{message}}, {{time}}).
+      const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          access_key: contactForm.web3formsKey,
-          subject: `Portfolio: ${values.topic} — ${values.name}`,
-          from_name: 'Portfolio contact form',
-          replyto: values.email,
-          ...values,
+          service_id: serviceId,
+          template_id: templateId,
+          user_id: publicKey,
+          template_params: {
+            name: values.name,
+            email: values.email,
+            title: values.topic,
+            message: values.message,
+            time: new Date().toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' }),
+            from_name: values.name,
+            from_email: values.email,
+            reply_to: values.email,
+          },
         }),
       })
-      const result = await response.json().catch(() => ({}))
-      setStatus(response.ok && result.success ? 'sent' : 'error')
+      if (!response.ok) console.error('[contact] EmailJS error', response.status, await response.text().catch(() => ''))
+      setStatus(response.ok ? 'sent' : 'error')
     } catch {
       setStatus('error')
     }
@@ -70,7 +81,7 @@ export default function ContactForm() {
         <h3 className="mt-4 text-3xl">{status === 'sent' ? `Thanks, ${values.name.split(' ')[0]}!` : 'Almost there!'}</h3>
         <p className="mx-auto mt-3 max-w-sm text-lg leading-relaxed text-pencil/80">
           {status === 'sent'
-            ? `Your message is on its way. I'll reply to ${values.email} soon.`
+            ? `Your message is on its way — a confirmation is heading to ${values.email}.`
             : 'Your email app opened with the message filled in — just press send there.'}
         </p>
         <Button variant="secondary" className="mt-6 -rotate-1" onClick={reset}>
