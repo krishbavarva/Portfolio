@@ -18,13 +18,13 @@ const field =
   'focus:border-pen focus:ring-4 focus:ring-pen/20 focus:outline-none'
 const label = 'mb-1.5 block font-hand text-xl'
 
-// Sent as the `title` field ({{title}} in the EmailJS template).
+// Sent as the `topic` field ({{topic}} in the EmailJS template).
 const topics = ['Alternance', 'Freelance project', 'Just saying hi']
 
 // Until EmailJS is configured: open the visitor's email (Gmail on desktop, mail app on phones)
 // with the message filled in, so the form is never a dead end.
-function openEmailDraft({ from_name, reply_to, title, message }) {
-  const subject = `${title} — from ${from_name}`
+function openEmailDraft({ from_name, reply_to, topic, message }) {
+  const subject = `[${topic}] New portfolio message from ${from_name}`
   const body = `${message}\n\n— ${from_name} (${reply_to})`
   const isTouch = window.matchMedia('(pointer: coarse)').matches
   const url = isTouch
@@ -126,7 +126,7 @@ export default function ContactForm() {
                   active ? `bg-pencil text-paper ${i % 2 ? 'rotate-1' : '-rotate-1'}` : 'bg-white hover:bg-postit'
                 }`}
               >
-                <input type="radio" name="title" value={t} checked={active} onChange={() => setTopic(t)} className="sr-only" />
+                <input type="radio" name="topic" value={t} checked={active} onChange={() => setTopic(t)} className="sr-only" />
                 {t}
               </label>
             )
