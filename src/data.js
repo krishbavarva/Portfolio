@@ -7,18 +7,6 @@ export const links = {
   github: 'https://github.com/krishbavarva',
 }
 
-// Contact form delivery via EmailJS (https://dashboard.emailjs.com). These IDs are meant to be
-// public, so they're safe in the code. Until serviceId and publicKey are filled in, the form
-// opens a pre-filled email to you instead of sending directly.
-// The visitor's confirmation email uses the "Auto-Reply" template (template_bhi83mj): link it in
-// EmailJS → Email Templates → Contact Us → Auto-Reply tab, and EmailJS sends it automatically.
-export const contactForm = {
-  serviceId: '', // Email Services → e.g. 'service_abc1234'
-  templateId: 'template_lslnn49', // "Contact Us" template
-  publicKey: '', // Account → General → Public Key
-  topics: ['Alternance', 'Freelance project', 'Just saying hi'],
-}
-
 // The "Download CV" menu. Files live in public/cv/.
 export const cvs = [
   { label: 'Full-Stack', note: 'JavaScript / Elixir', file: '/cv/Bavarva_Krish_CV_FullStack.pdf' },
