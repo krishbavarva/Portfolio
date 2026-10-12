@@ -21,24 +21,11 @@ const label = 'mb-1.5 block font-hand text-xl'
 // Sent as the `topic` field ({{topic}} in the EmailJS template).
 const topics = ['Alternance', 'Freelance project', 'Just saying hi']
 
-// Until EmailJS is configured: open the visitor's email (Gmail on desktop, mail app on phones)
-// with the message filled in, so the form is never a dead end.
-function openEmailDraft({ from_name, reply_to, topic, message }) {
-  const subject = `[${topic}] New portfolio message from ${from_name}`
-  const body = `${message}\n\n— ${from_name} (${reply_to})`
-  const isTouch = window.matchMedia('(pointer: coarse)').matches
-  const url = isTouch
-    ? `mailto:${links.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
-    : `https://mail.google.com/mail/?view=cm&fs=1&to=${links.email}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
-  if (isTouch) window.location.href = url
-  else window.open(url, '_blank', 'noopener')
-}
-
 export default function ContactForm() {
   const formRef = useRef(null)
   const timeRef = useRef(null)
   const botRef = useRef(null)
-  const [status, setStatus] = useState('idle') // idle | sending | sent | drafted | error
+  const [status, setStatus] = useState('idle') // idle | sending | sent | error
   const [topic, setTopic] = useState(topics[0])
   const [sentTo, setSentTo] = useState({ name: '', email: '' })
 
@@ -51,8 +38,8 @@ export default function ContactForm() {
     setSentTo({ name: data.from_name, email: data.reply_to })
 
     if (!configured) {
-      openEmailDraft(data)
-      setStatus('drafted')
+      console.error('[contact] EmailJS is not configured — set VITE_EMAILJS_SERVICE_ID, VITE_EMAILJS_TEMPLATE_ID and VITE_EMAILJS_PUBLIC_KEY')
+      setStatus('error')
       return
     }
 
@@ -70,15 +57,13 @@ export default function ContactForm() {
     }
   }
 
-  if (status === 'sent' || status === 'drafted') {
+  if (status === 'sent') {
     return (
       <Card tone="postit" decoration="tack" className="rotate-1 p-8 text-center shadow-hard md:p-10" aria-live="polite">
         <CheckCircle2 strokeWidth={2.5} className="mx-auto size-12 text-pen" />
-        <h3 className="mt-4 text-3xl">{status === 'sent' ? `Thanks, ${sentTo.name.split(' ')[0]}!` : 'Almost there!'}</h3>
+        <h3 className="mt-4 text-3xl">Thanks, {sentTo.name.split(' ')[0]}!</h3>
         <p className="mx-auto mt-3 max-w-sm text-lg leading-relaxed text-pencil/80">
-          {status === 'sent'
-            ? `Your message was sent successfully. I'll get back to you at ${sentTo.email}.`
-            : 'Your email app opened with the message filled in — just press send there.'}
+          Your message was sent successfully. I'll get back to you at {sentTo.email}.
         </p>
         <Button
           variant="secondary"
