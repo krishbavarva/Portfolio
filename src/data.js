@@ -7,6 +7,14 @@ export const links = {
   github: 'https://github.com/krishbavarva',
 }
 
+// Contact form delivery (free): get an access key at https://web3forms.com (enter your email,
+// the key arrives by email) and paste it here. It's meant to be public, so it's safe in the code.
+// While it's empty, the form opens a pre-filled email to you instead of sending directly.
+export const contactForm = {
+  web3formsKey: '',
+  topics: ['Alternance', 'Freelance project', 'Just saying hi'],
+}
+
 // The "Download CV" menu. Files live in public/cv/.
 export const cvs = [
   { label: 'Full-Stack', note: 'JavaScript / Elixir', file: '/cv/Bavarva_Krish_CV_FullStack.pdf' },
