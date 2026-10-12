@@ -18,10 +18,13 @@ const field =
   'focus:border-pen focus:ring-4 focus:ring-pen/20 focus:outline-none'
 const label = 'mb-1.5 block font-hand text-xl'
 
+// Sent as the `title` field ({{title}} in the EmailJS template).
+const topics = ['Alternance', 'Freelance project', 'Just saying hi']
+
 // Until EmailJS is configured: open the visitor's email (Gmail on desktop, mail app on phones)
 // with the message filled in, so the form is never a dead end.
-function openEmailDraft({ from_name, reply_to, message }) {
-  const subject = `Portfolio message from ${from_name}`
+function openEmailDraft({ from_name, reply_to, title, message }) {
+  const subject = `${title} — from ${from_name}`
   const body = `${message}\n\n— ${from_name} (${reply_to})`
   const isTouch = window.matchMedia('(pointer: coarse)').matches
   const url = isTouch
@@ -36,6 +39,7 @@ export default function ContactForm() {
   const timeRef = useRef(null)
   const botRef = useRef(null)
   const [status, setStatus] = useState('idle') // idle | sending | sent | drafted | error
+  const [topic, setTopic] = useState(topics[0])
   const [sentTo, setSentTo] = useState({ name: '', email: '' })
 
   async function onSubmit(e) {
@@ -76,7 +80,14 @@ export default function ContactForm() {
             ? `Your message was sent successfully. I'll get back to you at ${sentTo.email}.`
             : 'Your email app opened with the message filled in — just press send there.'}
         </p>
-        <Button variant="secondary" className="mt-6 -rotate-1" onClick={() => setStatus('idle')}>
+        <Button
+          variant="secondary"
+          className="mt-6 -rotate-1"
+          onClick={() => {
+            setTopic(topics[0])
+            setStatus('idle')
+          }}
+        >
           Write another message
         </Button>
       </Card>
@@ -102,6 +113,26 @@ export default function ContactForm() {
           <input id="cf-email" name="reply_to" type="email" required autoComplete="email" maxLength={200} placeholder="jane@company.com" className={field} />
         </div>
       </div>
+
+      <fieldset className="mt-5">
+        <legend className={label}>What's it about?</legend>
+        <div className="flex flex-wrap gap-2.5">
+          {topics.map((t, i) => {
+            const active = topic === t
+            return (
+              <label
+                key={t}
+                className={`min-h-11 cursor-pointer rounded-wobbly border-2 border-pencil px-4 py-2 font-hand text-lg transition-[rotate,background-color,color] duration-100 has-focus-visible:ring-4 has-focus-visible:ring-pen/30 ${
+                  active ? `bg-pencil text-paper ${i % 2 ? 'rotate-1' : '-rotate-1'}` : 'bg-white hover:bg-postit'
+                }`}
+              >
+                <input type="radio" name="title" value={t} checked={active} onChange={() => setTopic(t)} className="sr-only" />
+                {t}
+              </label>
+            )
+          })}
+        </div>
+      </fieldset>
 
       <div className="mt-5">
         <label htmlFor="cf-message" className={label}>
